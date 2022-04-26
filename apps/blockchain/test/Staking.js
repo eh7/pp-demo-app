@@ -16,6 +16,7 @@ contract('Staking', async (accounts) => {
      console.log(await instance.active());
      await instance.deActivate();
      console.log(await instance.active());
+     console.log(await token.decimals());
     // console.log(token);
     // console.log(await instance.getWallets());
     // console.log(await .getWallets());
