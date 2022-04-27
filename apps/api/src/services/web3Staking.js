@@ -3,36 +3,81 @@ require('dotenv').config();
 const { ethers } = require('ethers');
 const Wallet = ethers.Wallet;
 
+const contractJson = require('../' + process.env.CONTRACT_JSON_DIR + 'Staking.json');
+const contractAddress = contractJson.networks[process.env.GANACHE_NETWORK_ID].address;
+const provider = new ethers.providers.JsonRpcProvider(process.env.GANACHE_URI);
 const mnemonic = process.env.GANACHE_PHRASE;
-//const wallet = Wallet.fromMnemonic(mnemonic);//, "m/44’/60’/0’/0/1");
-const wallet0 = Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/0");
-const wallet1 = Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/1");
-const wallet2 = Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/2");
-const wallet3 = Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/3");
-console.log("Address0: " + wallet0.address);
-console.log("Address0: " + wallet0.privateKey);
-console.log("Address0: " + wallet0.publicKey);
-console.log("Address1: " + wallet1.address);
-console.log("Address2: " + wallet2.address);
-console.log("Address3: " + wallet3.address);
-
-//const HDWallet = require("@truffle/hdwallet-provider");
-//const HDKey = require('hdkey');
-//const bip39 = require('bip39');
-//const Utils  = require('ethereumjs-utils');
-
-//var Web3 = require('web3');
-//let web3Provider = null;
-//if (process.env.ETH_ENV === 'development') {
-//  web3Provider = new Web3.providers.HttpProvider(process.env.RINKEBY_URI)
-//} else {
-//  web3Provider = new Web3.providers.HttpProvider(process.env.GANACHE_URI)
-//}
-//const web3 = new Web3(web3Provider);
-
-//console.log(web3Provider);
-//process.exit();
 
 module.exports = class Web3Staking {
+
+  constructor () {
+    this.wallet = Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/0`);
+    this.walletConnected = this.wallet.connect(provider);
+    console.log("init done", this.walletConnected.address);
+  }
+
+/*
+  await getStakedStakingEvents(walletConnected);
+  await getUnStakedStakingEvents(walletConnected);
+*/
+
+  async getUnStakedStakingEvents () {
+    const stakingContract = new ethers.Contract(
+      contractAddress,
+      contractJson.abi,
+      provider
+    )
+    const stakingWithSigner = stakingContract.connect(this.walletConnected);
+
+    const logsUnStaked = await stakingWithSigner.queryFilter("UnStaked", 0);
+
+    const unStakedEvents = logsUnStaked.map(function(ev, index, myArr) {
+      // console.log('unStakedEvents:', ev.args);
+      const newEvent = {
+        'wallet': ev.args.wallet,
+        'amount': ev.args.amount,
+        'time': ev.args.time
+      }
+      return newEvent;
+    });
+
+    return unStakedEvents;
+  }
+
+  async getStakedStakingEvents () {
+    const stakingContract = new ethers.Contract(
+      contractAddress,
+      contractJson.abi,
+      provider
+    )
+    const stakingWithSigner = stakingContract.connect(this.walletConnected);
+
+    const logsStaked = await stakingWithSigner.queryFilter("Staked", 0);
+
+    const stakedEvents = logsStaked.map(function(ev, index, myArr) {
+      // console.log('stakedEvents:', ev.args);
+      const newEvent = {
+        'wallet': ev.args.wallet,
+        'amount': ev.args.amount,
+        'time': ev.args.time
+      }
+      return newEvent;
+    });
+    
+    return stakedEvents;
+  }
+
+  async getWallets () {
+    const stakingContract = new ethers.Contract(
+      contractAddress,
+      contractJson.abi,
+      provider
+    )
+    const stakingWithSigner = stakingContract.connect(this.walletConnected);
+
+    const wallets = await stakingWithSigner.getWallets();
+    console.log('getWallets :: ', wallets);
+    return wallets;
+  }
 
 }

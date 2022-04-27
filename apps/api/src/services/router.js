@@ -1,4 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
+const Web3Staking = require("./web3Staking");
+
+let web3Staking;
+
+// console.log(Web3Staking);
 
 var app = express();
 
@@ -6,6 +13,8 @@ module.exports = class Router {
 
   constructor () {
     this.app = app;
+    web3Staking = new Web3Staking();
+    console.log('Router init');
   }
 
   routes () {
@@ -15,6 +24,7 @@ module.exports = class Router {
         <a href='/'>/</a><br>\
         <a href='/staking'>/staking</a><br>\
         <a href='/unStaking'>/unStaking</a><br>\
+        <a href='/wallets'>/wallet/address</a><br>\
         <a href='/wallet/address'>/wallet/address</a><br>\
         <a href='/activate'>/activate</a><br>\
         <a href='/deActivate'>/deActivate</a><br>\
@@ -23,25 +33,43 @@ module.exports = class Router {
     })
 
     this.app.get('/staking', async function (req, res) {
+// console.log(this);
+// console.log(await web3Staking.getUnStakedStakingEvents());
+      const events = await web3Staking.getStakedStakingEvents();
+//console.log(web3Staking.getUnStakedStakingEvents());
       res.setHeader('Content-Type', 'application/json');
       res.json({
-        staking: 'events'
+        staking: 'events',
+        events,
       });
     });
 
     this.app.get('/unStaking', async function (req, res) {
+      const events = await web3Staking.getUnStakedStakingEvents();
       res.setHeader('Content-Type', 'application/json');
       res.json({
         unStaking: 'events',
+        events,
+      });
+    });
+
+    this.app.get('/wallets', async function (req, res) {
+      const wallets = await web3Staking.getWallets();
+      const address = req.params.address;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({
+        wallets
       });
     });
 
     this.app.get('/wallet/:address', async function (req, res) {
+      const wallets = await web3Staking.getWallets();
       const address = req.params.address;
       res.setHeader('Content-Type', 'application/json');
       res.json({
         wallet: 'info',
 	address,
+        wallets
       });
     });
 

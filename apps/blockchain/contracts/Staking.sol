@@ -37,13 +37,13 @@ contract Staking is Ownable {
     token = IERC20(_token);
   }
 
-  event Debug(
-    address wallet,
-    uint staked,
-    uint stakedTime,
-    uint unStaked,
-    uint unStakedTime
-  );
+  //event Debug(
+  //  address wallet,
+  //  uint staked,
+  //  uint stakedTime,
+  //  uint unStaked,
+  //  uint unStakedTime
+  //);
 
   event Staked(
     address wallet,
@@ -105,27 +105,11 @@ contract Staking is Ownable {
     );
   }
 
-  function getWallets () public onlyOwner
+  function getWallets () public view onlyOwner
     returns (StakeRecord[] memory wallets) 
-    // returns (address[] memory wallets) 
   {
-    // StakeRecord[2] memory walletStakeRecord;
     StakeRecord[] memory walletStakeRecord = new StakeRecord[](wallet.length);
-    // mapping(uint => StakeRecord) memory walletsStakeRecord;
     for (uint i = 0; i < wallet.length; i++) {
-      emit Debug(
-        wallet[i],
-        staked[wallet[i]],
-        stakedTime[wallet[i]],
-        unStaked[wallet[i]],
-        unStakedTime[wallet[i]]
-      );
-//    uint staked;
-//    uint stakedTime;
-//    uint unStaked;
-//    uint unStakedTime;
-
-//      StakeRecord(
       walletStakeRecord[i] = StakeRecord(
         wallet[i],
         staked[wallet[i]],
@@ -133,19 +117,8 @@ contract Staking is Ownable {
         unStaked[wallet[i]],
         unStakedTime[wallet[i]]
       );
-    //  wallets[i] = wallet[i];
     }
-
     return walletStakeRecord;
-    // return wallet;
-    //emit Activate();
-
-    //staked[msg.sender] = _amount;
-    //stakedTime[msg.sender] = block.timestamp;
-    //emit Staked(
-    //  msg.sender,
-    //  _amount
-    //);
   }
 
   function activate () public onlyOwner {

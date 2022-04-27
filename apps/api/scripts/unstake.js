@@ -15,11 +15,10 @@ const addStake = async (amount, wallet) => {
   )
   const stakingWithSigner = stakingContract.connect(wallet);
 
-  const stake = await stakingWithSigner.stake(
-    amount
-  );
+  const stake = await stakingWithSigner.unstake();
   console.log('Add Stake :: ', stake);
-  return stake;
+
+  // return stake;
 }
 
 

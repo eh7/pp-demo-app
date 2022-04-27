@@ -117,7 +117,7 @@ contract('Staking', async (accounts) => {
       "constract balance does not equal 10",
     );
   
-    await getStakeSettings(instance, accounts);
+//    await getStakeSettings(instance, accounts);
 
     await token.transfer(accounts[1], 10);
     console.log(
@@ -132,38 +132,20 @@ contract('Staking', async (accounts) => {
       (await token.balanceOf(accounts[1])).toString()
     );
 
+/*
     console.log(
       "Wallets:",
       await instance.getWallets.call()
       // instance
     );
-
-    const getWallets = await instance.getWallets()
-    truffleAssert.eventEmitted(getWallets, 'Debug', (ev) => {
-      console.log(ev);
-//      console.log(ev.balance.toString());
-      return true;
-    });
-
-
-/*
-    const staked = await instance.staked(accounts[0]);
-    const stakedTime = await instance.stakedTime(accounts[0]);
-    const unStaked = await instance.unStaked(accounts[0]);
-    const unStakedTime = await instance.unStakedTime(accounts[0]);
-    console.log(
-      staked.toString(),
-      stakedTime.toString(),
-      unStaked.toString(),
-      unStakedTime.toString()
-    );
 */
+
     const unStakeReturn = await instance.unstake();
     // console.log(unStakeReturn);
 
     // check UnStaked event triggered
-    truffleAssert.eventEmitted(unStakeReturn, 'UnStaked', (ev) => {
-      // console.log(ev);
+    await truffleAssert.eventEmitted(unStakeReturn, 'UnStaked', (ev) => {
+//      console.log(ev);
       // return true;
       return (
         ev.wallet === accounts[0] &&
@@ -172,68 +154,11 @@ contract('Staking', async (accounts) => {
     });
 
     await getStakeSettings(instance, accounts);
+  });
 
-/*
-    const staked = await instance.staked(accounts[0]);
-    const stakedTime = await instance.stakedTime(accounts[0]);
-    const unStaked = await instance.unStaked(accounts[0]);
-    const unStakedTime = await instance.unStakedTime(accounts[0]);
-    console.log(
-      staked.toString(),
-      stakedTime.toString(),
-      unStaked.toString(),
-      unStakedTime.toString()
-    );
-
-//    console.log(
-//      "constract balance: ",
-//      (await token.balanceOf(instance.address)).toString()
-//    );
-*/
-
-//    truffleAssert.eventEmitted(stakeReturn, 'Debug', (ev) => {
-//      console.log(ev.amount.toString());
-//      console.log(ev.balance.toString());
-//      return true;
-//    });
-
-    /*
-    await truffleAssert.reverts(
-      await instance.stake(
-        10,
-      ),
-      "Staking Contract is not ctive"
-    );
-
-    // stake(uint amount)
-    const stakeReturn = await instance.stake(
-      10,
-    );
-
-    await truffleAssert.reverts(
-      stakeReturn,
-      "Staking Contract is not active"
-    );
-
-//      {
-//        from: owner
-//        // value: web3.utils.toWei('0.1'),
-//      }
-//    );
-
-
-    // check Staked event triggered
-    truffleAssert.eventEmitted(property, 'Staked', (ev) => {
-      console.log(ev);
-      // return true;
-//      return (
-//        ev.owner === owner &&
-//        ev.propertyURI === URI &&
-//        ev.newPropertyId.toNumber() === propertyId
-//      );
-    });
-    */
-
+  it('testing getWallets function', async () => {
+    const getWallets = await instance.getWallets.call()
+    console.log("Wallets:", getWallets);
   });
 
 });
