@@ -20,37 +20,47 @@ contract Staking is Ownable {
 
   address[] wallet;
 
-  mapping(address => uint) staked;
-  mapping(address => uint) stakedTime;
-  mapping(address => uint) unStakedTime;
+  mapping(address => uint) public staked;
+  mapping(address => uint) public stakedTime;
+  mapping(address => uint) public unStaked;
+  mapping(address => uint) public unStakedTime;
+
+  struct StakeRecord {
+    address wallet;
+    uint staked;
+    uint stakedTime;
+    uint unStaked;
+    uint unStakedTime;
+  }
 
   constructor(address _token) {
     token = IERC20(_token);
   }
 
-/*
-  struct Stake {
+  event Debug(
     address wallet,
-    uint stakedAmount,
+    uint staked,
     uint stakedTime,
-    uint unStakedTime,
-  }
-*/
+    uint unStaked,
+    uint unStakedTime
+  );
 
   event Staked(
     address wallet,
-    uint amount
+    uint amount,
+    uint time
   );
 
   event UnStaked(
     address wallet,
-    uint amount
+    uint amount,
+    uint time
   );
 
   modifier isStakeValid (uint _amount) {
-    require(token.balanceOf(msg.sender) > 9, "stake should be more than 9");
     require(_amount > 9, "stake should be more than 9");
     require(_amount < 1000001, "stake should be less than 1,000,001");
+    require(token.balanceOf(msg.sender) >= _amount, "balance of msg.sender should be equal or more than amount to stake");
     _;
   }
 
@@ -64,16 +74,15 @@ contract Staking is Ownable {
     isActive
     isStakeValid(_amount)
   {
-    // IERC20 paymentToken = IERC20(token);
-    // uint256 amountToPay;
-    // require(paymentToken.allowance(msg.sender, address(this)) >= amountToPay,"Insuficient Allowance");
-    // require(paymentToken.transferFrom(msg.sender,address(this),amountToPay),"transfer Failed");
+    require(token.transferFrom(msg.sender,address(this), _amount), "transfer Failed");
 
+    wallet.push(msg.sender);
     staked[msg.sender] = _amount;
     stakedTime[msg.sender] = block.timestamp;
     emit Staked(
       msg.sender,
-      _amount
+      _amount,
+      stakedTime[msg.sender] 
     );
   }
 
@@ -81,24 +90,62 @@ contract Staking is Ownable {
     public 
     isActive
   {
-    // IERC20 paymentToken = IERC20(token);
-    // uint256 amountToPay;
-    // require(paymentToken.allowance(address(this), msg.sender) >= amountToPay,"Insuficient Allowance");
-    // require(paymentToken.transferFrom(msg.sender,address(this),amountToPay),"transfer Failed");
-
     uint amount =  staked[msg.sender];
+
+    require(token.transfer(msg.sender, amount), "transfer Failed");
+
     unStakedTime[msg.sender] = block.timestamp;
-    emit Staked(
+    staked[msg.sender] = 0;
+    unStaked[msg.sender] = amount;
+
+    emit UnStaked(
       msg.sender,
-      amount
+      amount,
+      unStakedTime[msg.sender] 
     );
   }
 
   function getWallets () public onlyOwner
-    // returns (address wallets) 
+    returns (StakeRecord[] wallets) 
+    // returns (address[] memory wallets) 
   {
-    //emit Activate();
+    uint length = wallet.length;
+    StakeRecord[2] memory walletStakeRecord;
+    // mapping(uint => StakeRecord) memory walletsStakeRecord;
+    for (uint i = 0; i < wallet.length; i++) {
+      emit Debug(
+        wallet[i],
+        staked[wallet[i]],
+        stakedTime[wallet[i]],
+        unStaked[wallet[i]],
+        unStakedTime[wallet[i]]
+      );
+//    uint staked;
+//    uint stakedTime;
+//    uint unStaked;
+//    uint unStakedTime;
+
+//      StakeRecord(
+      walletStakeRecord[i] = StakeRecord(
+        wallet[i],
+        staked[wallet[i]],
+        stakedTime[wallet[i]],
+        unStaked[wallet[i]],
+        unStakedTime[wallet[i]]
+      );
+    //  wallets[i] = wallet[i];
+    }
+
+    return walletStakeRecord;
     // return wallet;
+    //emit Activate();
+
+    //staked[msg.sender] = _amount;
+    //stakedTime[msg.sender] = block.timestamp;
+    //emit Staked(
+    //  msg.sender,
+    //  _amount
+    //);
   }
 
   function activate () public onlyOwner {
