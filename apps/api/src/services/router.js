@@ -26,6 +26,7 @@ module.exports = class Router {
         <a href='/unStaking'>/unStaking</a><br>\
         <a href='/wallets'>/wallet/address</a><br>\
         <a href='/wallet/address'>/wallet/address</a><br>\
+        <a href='/active'>/active</a><br>\
         <a href='/activate'>/activate</a><br>\
         <a href='/deActivate'>/deActivate</a><br>\
         ";
@@ -73,10 +74,19 @@ module.exports = class Router {
       });
     });
 
-    this.app.get('/activate', async function (req, res) {
+    this.app.get('/active', async function (req, res) {
+      const activate = await web3Staking.active();
       res.setHeader('Content-Type', 'application/json');
       res.json({
-        active: 'status'
+        active,
+      });
+    });
+
+    this.app.get('/activate', async function (req, res) {
+      const activate = await web3Staking.activate();
+      res.setHeader('Content-Type', 'application/json');
+      res.json({
+        activate,
       });
     });
 

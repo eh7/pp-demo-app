@@ -80,4 +80,28 @@ module.exports = class Web3Staking {
     return wallets;
   }
 
+  async activate () {
+    const stakingContract = new ethers.Contract(
+      contractAddress,
+      contractJson.abi,
+      provider
+    )
+    const stakingWithSigner = stakingContract.connect(this.walletConnected);
+    const activate = await stakingWithSigner.activate();
+    console.log('activate :: ', activate);
+    return activate;
+  }
+
+  async active () {
+    const stakingContract = new ethers.Contract(
+      contractAddress,
+      contractJson.abi,
+      provider
+    )
+    const stakingWithSigner = stakingContract.connect(this.walletConnected);
+    const active = await stakingWithSigner.active();
+    console.log('active :: ', active);
+    return active;
+  }
+
 }
