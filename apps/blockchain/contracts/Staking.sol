@@ -106,11 +106,11 @@ contract Staking is Ownable {
   }
 
   function getWallets () public onlyOwner
-    returns (StakeRecord[] wallets) 
+    returns (StakeRecord[] memory wallets) 
     // returns (address[] memory wallets) 
   {
-    uint length = wallet.length;
-    StakeRecord[2] memory walletStakeRecord;
+    // StakeRecord[2] memory walletStakeRecord;
+    StakeRecord[] memory walletStakeRecord = new StakeRecord[](wallet.length);
     // mapping(uint => StakeRecord) memory walletsStakeRecord;
     for (uint i = 0; i < wallet.length; i++) {
       emit Debug(
