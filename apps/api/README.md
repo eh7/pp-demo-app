@@ -1,5 +1,6 @@
 # api
 
+<pre>
 npm i
 npm start
 
@@ -7,10 +8,9 @@ Install ganache or use your own development blockchain, update your details in t
 
 Sample .env file below;
 ---------------------------------------------------------------------------
-<pre>
 CONTRACT_JSON_DIR='../../blockchain/build/contracts/'
 GANACHE_NETWORK_ID="5777"
 GANACHE_URI="http://127.0.0.1:7545"
 GANACHE_PHRASE='Enter the phrase from your find in your ganache interface'
-</pre>
 ---------------------------------------------------------------------------
+</pre>
