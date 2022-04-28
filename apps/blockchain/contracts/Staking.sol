@@ -37,14 +37,6 @@ contract Staking is Ownable {
     token = IERC20(_token);
   }
 
-  //event Debug(
-  //  address wallet,
-  //  uint staked,
-  //  uint stakedTime,
-  //  uint unStaked,
-  //  uint unStakedTime
-  //);
-
   event Staked(
     address wallet,
     uint amount,
