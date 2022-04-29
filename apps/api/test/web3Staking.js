@@ -3,7 +3,7 @@ const assert = require('assert');
 const _ = require('underscore');
 
 let web3Staking = null;
-
+/*
 const properties = [
   {
     id: 1,
@@ -52,6 +52,7 @@ const bookings = [
     renter: '0x385D0A5969867d1ba7D93B27Da87B539dC23DCE6',
   },
 ]
+*/
 
 describe('web3Staking service testing', async function () {
 
@@ -65,7 +66,7 @@ describe('web3Staking service testing', async function () {
 //    await mongod.stop();
   });
 
-  it('initialize database', async function () {
+  it.skip('initialize database', async function () {
 //    database = new Database(uri);
 //    assert(database.mongoose.connection.readyState === 2, "Mongoose Connected");
     /*
@@ -80,6 +81,13 @@ describe('web3Staking service testing', async function () {
 
   it('initialize web3Staking', async function () {
     web3Staking = new Web3Staking();
+//    console.log(await web3Staking.provider.getBlock());
+//    console.log(await web3Staking.walletConnected.provider.getBlock(1));
+    console.log(await web3Staking.walletConnected.provider.getNetwork());
+    assert(
+      web3Staking.walletConnected.provider.connection.url === 'http://127.0.0.1:7545',
+      "web3Staking initialized okay"
+    );
 //    assert(
 //      await web3Staking.web3.eth.net.isListening(),
 //      "web3Staking initialized okay"
