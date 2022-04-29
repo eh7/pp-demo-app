@@ -2,6 +2,7 @@
 
 <pre>
 npm i
+npm test 
 npm start
 
 Install ganache or use your own development blockchain, update your details in the .env file to match your setup.
