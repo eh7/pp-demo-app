@@ -5,8 +5,6 @@ const Web3Staking = require("./web3Staking");
 
 let web3Staking;
 
-// console.log(Web3Staking);
-
 var app = express();
 
 module.exports = class Router {
@@ -14,7 +12,7 @@ module.exports = class Router {
   constructor () {
     this.app = app;
     web3Staking = new Web3Staking();
-    console.log('Router init');
+    // console.log('Router init');
   }
 
   routes () {

@@ -23,13 +23,17 @@ describe('router testing', async function () {
 //    await mongod.stop();
   });
 
+  /*
   it('initialize database', async function () {
 //    database = new Database(uri);
 //    assert(database.mongoose.connection.readyState === 2, "Mongoose Connected");
   });
+  */
 
   it('initialize router', async function () {
-//    router = new Router(app, database);
+    router = new Router();
+    assert.ok(router, "router is not initialized!!");
+//console.log(router);
 //    assert(router, "router initialize okay");
   });
 

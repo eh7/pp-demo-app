@@ -21,24 +21,10 @@ module.exports = class Web3Staking {
     )
     this.stakingWithSigner = this.stakingContract.connect(this.walletConnected);
 
-    console.log("init done", this.walletConnected.address);
+    // console.log("init done", this.walletConnected.address);
   }
 
-/*
-  await getStakedStakingEvents(walletConnected);
-  await getUnStakedStakingEvents(walletConnected);
-*/
-
   async getUnStakedStakingEvents () {
-    /*
-    const stakingContract = new ethers.Contract(
-      contractAddress,
-      contractJson.abi,
-      provider
-    )
-    const stakingWithSigner = stakingContract.connect(this.walletConnected);
-    */
-
     const logsUnStaked = await this.stakingWithSigner.queryFilter("UnStaked", 0);
 
     const unStakedEvents = logsUnStaked.map(function(ev, index, myArr) {
@@ -55,19 +41,9 @@ module.exports = class Web3Staking {
   }
 
   async getStakedStakingEvents () {
-    /*
-    const stakingContract = new ethers.Contract(
-      contractAddress,
-      contractJson.abi,
-      provider
-    )
-    const stakingWithSigner = stakingContract.connect(this.walletConnected);
-    */
-
     const logsStaked = await this.stakingWithSigner.queryFilter("Staked", 0);
 
     const stakedEvents = logsStaked.map(function(ev, index, myArr) {
-      // console.log('stakedEvents:', ev.args);
       const newEvent = {
         'wallet': ev.args.wallet,
         'amount': ev.args.amount,
@@ -80,46 +56,39 @@ module.exports = class Web3Staking {
   }
 
   async getWallets () {
-    /*
-    const stakingContract = new ethers.Contract(
-      contractAddress,
-      contractJson.abi,
-      provider
-    )
-    const stakingWithSigner = stakingContract.connect(this.walletConnected);
-    */
-
     const wallets = await this.stakingWithSigner.getWallets();
-    console.log('getWallets :: ', wallets);
+    // console.log('getWallets :: ', wallets);
     return wallets;
   }
 
   async activate () {
-    /*
-    const stakingContract = new ethers.Contract(
-      contractAddress,
-      contractJson.abi,
-      provider
-    )
-    const stakingWithSigner = stakingContract.connect(this.walletConnected);
-    */
     const activate = await this.stakingWithSigner.activate();
-    console.log('activate :: ', activate);
+    // console.log('activate :: ', activate);
     return activate;
   }
 
+  async deactivate () {
+    const deactivate = await this.stakingWithSigner.deActivate();
+    // console.log('deactivate :: ', deactivate);
+    return deactivate;
+  }
+
   async active () {
-    /*
-    const stakingContract = new ethers.Contract(
-      contractAddress,
-      contractJson.abi,
-      provider
-    )
-    const stakingWithSigner = stakingContract.connect(this.walletConnected);
-    */
     const active = await this.stakingWithSigner.active();
-    console.log('active :: ', active);
+    // console.log('active :: ', active);
     return active;
+  }
+
+  async stake () {
+    const stake = await this.stakingWithSigner.stake(10);
+    // console.log('stake :: ', stake);
+    return stake;
+  }
+
+  async unstake () {
+    const unstake = await this.stakingWithSigner.unstake();
+    // console.log('unstake :: ', unstake);
+    return unstake;
   }
 
 }

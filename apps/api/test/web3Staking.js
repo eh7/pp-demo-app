@@ -66,200 +66,81 @@ describe('web3Staking service testing', async function () {
 //    await mongod.stop();
   });
 
+  /*
   it.skip('initialize database', async function () {
 //    database = new Database(uri);
 //    assert(database.mongoose.connection.readyState === 2, "Mongoose Connected");
-    /*
-    await  properties.forEach(async (property) => {
-      await database.saveProperty(propertiy);
-    });
-    await bookings.forEach(async (booking) => {
-      await database.saveBooking(booking);
-    });
-    */
   });
+  */
 
   it('initialize web3Staking', async function () {
     web3Staking = new Web3Staking();
-//    console.log(await web3Staking.provider.getBlock());
-//    console.log(await web3Staking.walletConnected.provider.getBlock(1));
-    console.log(await web3Staking.walletConnected.provider.getNetwork());
-    assert(
-      web3Staking.walletConnected.provider.connection.url === 'http://127.0.0.1:7545',
-      "web3Staking initialized okay"
+    assert.ok(
+      await web3Staking.provider.ready,
+      "web3Staking ethers connection ready"
     );
-//    assert(
-//      await web3Staking.web3.eth.net.isListening(),
-//      "web3Staking initialized okay"
-//    );
-  });
-
-  it.skip('getPropertyEvents', async function () {
-    const propertyAddedList = await web3Staking.getPropertyEvents();
-    console.log(propertyAddedList.length);
-  });
-	
-//    const propertyBookedList = await this.getPropertyBookingEvents();
-
-/*
-  it('getPastPropertiesLogs', async function () {
-    const propertyAddedEvents = await web3Staking.getPastPropertiesLogs();
-    console.log(propertyAddedEvents);
-  });
-
-  const property = {
-    id: 1,
-    owner: '0xd03b9c07703bC73ccd1586E202C9DdF5af45e81C',
-    URI: 'http://eh7.io/1.json',
-  }
-
-  const booking = {
-    id: 1,
-    checkIn: (new Date("2022-03-12") / 1000),
-    checkOut: (new Date("2022-03-13") / 1000),
-    propertyId: 1,
-    renter: '0x6b1527F6E2248A862061963b8c1BD013AcaCa5A6',
-  }
-
-  before(async function () {
-    mongod = await MongoMemoryServer.create();
-    uri = mongod.getUri() + 'testing';
-  });
-
-  after(async function () {
-    await database.mongoose.connection.close();
-    await mongod.stop();
-  });
-
-  it('initialize', async function () {
-    database = new Database(uri);
-    assert(database.mongoose.connection.readyState === 2, "Mongoose Connected");
-  });
-
-  it('dropProperties', async function () {
-    const dropProperties = await database.dropProperties();
-    assert(dropProperties.acknowledged, "dropProperties worked");
-  });
-
-  it('dropBookings', async function () {
-    const dropBookings = await database.dropBookings();
-    assert(dropBookings.acknowledged, "dropBookings worked");
-  });
-
-  it('getProperties', async function () {
-    const getProperties = await database.getProperties();
-    assert(_.isEqual(getProperties, []), "getProperties worked")
-  });
-
-  it('getBookings', async function () {
-    const getBookings = await database.getBookings();
-    assert(_.isEqual(getBookings, []), "getBookings worked")
-  });
-
-  it('saveProperty(propertyData)', async function () {
-    const saveProperty = await database.saveProperty(property);
-    assert(
-      _.isEqual(saveProperty.id, property.id),
-      "saveProperty worked - id okay"
-    );
-    assert(
-      _.isEqual(saveProperty.owner, property.owner),
-      "saveProperty worked - owner okay"
-    );
-    assert(
-      _.isEqual(saveProperty.URI, property.URI),
-      "saveProperty worked - URI okay"
+    assert.ok(
+      web3Staking.stakingWithSigner,
+      "web3Staking ethers connection ready this.stakingWithSigner,"
     );
   });
 
-  it('getProperty(id)', async function () {
-    const getProperty = await database.getProperty(1);
-    assert(
-      _.isEqual(getProperty.id, property.id),
-      "getProperty worked - id okay"
-    );
-    assert(
-      _.isEqual(getProperty.owner, property.owner),
-      "getProperty worked - owner okay"
-    );
-    assert(
-      _.isEqual(getProperty.URI, property.URI),
-      "getProperty worked - URI okay"
-    );
-  });
-
-  it('getPropertiesForOwner(id)', async function () {
-    const getPropertiesForOwner = await database.getPropertiesForOwner(
-      property.owner
-    );
-    assert(
-      getPropertiesForOwner.length === 1,
-      "1 property in Properties collection"
-    );
-    getPropertiesForOwner.map((p, i) => {
-      assert(
-        p.URI == property.URI,
-        "returned property URI equals URI"
+  it('check is staking active', async function () {
+    if (await web3Staking.active()) {
+      assert.ok(
+        (await web3Staking.active()),
+        "web3Staking.active is not true!!"
       );
-      assert(
-        p.owner == property.owner,
-        "returned property owner equals owner"
+    } else {
+      assert.ok(
+        (await web3Staking.activate()),
+        "web3Staking.activate"
       );
-    });
+      assert.ok(
+        (await web3Staking.active()),
+        "web3Staking.active is not true!!"
+      );
+    }
   });
 
-  // async saveBooking (data) {
-  it('saveBooking(propertyData)', async function () {
-    const saveBooking = await database.saveBooking(booking);
-    assert(
-      _.isEqual(saveBooking.id, booking.id),
-      "saveBooking worked - id okay"
-    );
-    assert(
-      _.isEqual(saveBooking.renter, booking.renter),
-      "saveBooking worked - owner okay"
-    );
-    assert(
-      _.isEqual(saveBooking.propertyId, booking.propertyId),
-      "saveBooking worked - propertyId okay"
-    );
-    assert(
-      saveBooking.checkIn === booking.checkIn &&
-      saveBooking.checkOut === booking.checkOut,
-      "saveBooking worked - checkIn and checkOut okay"
+  it('check stake() function', async function () {
+    console.log(
+      (await web3Staking.stake(10)),
+      "check stake(10) function"
     );
   });
 
-  it('getBooking(id)', async function () {
-    const getBooking = await database.getBooking(
-      booking.id
-    );
-    assert(
-      getBooking.id === booking.id,
-      "getBooking worked - id's match okay"
+  it('check getWallets() function', async function () {
+    assert.ok(
+      (await web3Staking.getWallets()).length > 0,
+      "check getWallets() function has no data"
     );
   });
 
-  it('getBookingsForProperty(propertyId)', async function () {
-    const getBookingsForProperty = await database.getBookingsForProperty(
-      property.id
+  it('deactivate staking active', async function () {
+    assert.ok(
+      (await web3Staking.deactivate()),
+      "web3Staking.deactivate"
     );
-    assert(
-      getBookingsForProperty[0].renter === booking.renter,
-      "getBookingsForProperty worked - renters match okay"
+    assert.ok(
+      (await web3Staking.active()) === false,
+      "web3Staking.active is not false!!"
     );
   });
 
-  it('getBookingsForRenter(propertyId)', async function () {
-    const getBookingsForRenter = await database.getBookingsForRenter(
-      booking.renter
-    );
-    assert(
-      getBookingsForRenter[0].renter === booking.renter,
-      "getBookingsForRenter worked - renters match okay"
+  it('getStakedStakingEvents', async function () {
+    assert.ok(
+      (await web3Staking.getStakedStakingEvents()).length > 0,
+      "web3Staking.getStakedStakingEvents not greater than 0"
     );
   });
-*/
+
+  it('getUnStakedStakingEvents', async function () {
+    assert.ok(
+      (await web3Staking.getUnStakedStakingEvents()).length > 0,
+      "web3Staking.getUnStakedStakingEvents not greater than 0"
+    );
+  });
 
 });
 
