@@ -1,4 +1,4 @@
-const Router = require('../src/services/router');
+const Router = require('../src_js/services/router');
 
 const assert = require('assert');
 const expect = require('chai').expect

@@ -2,10 +2,13 @@
   "compilerOptions": {
     "module": "commonjs",
     "sourceMap": true,
+    "rootDirs": [ "./src" ],
+//    "rootDirs": [ "./src", "./test" ],
 //    "target": "es5",
 //    "lib": [ "es2015.promise", "es5", "dom" ],
     "target": "es2016",  
     "lib": [ "es2015.promise", "es2016", "dom" ],
+    "types": [ "node" ],
     //"lib": [ "dom", "es2015" ],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

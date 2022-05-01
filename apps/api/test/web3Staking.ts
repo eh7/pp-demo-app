@@ -1,8 +1,20 @@
+import { Web3Staking } from '../src/services/web3Staking';
+import { expect } from 'chai';
+import 'mocha';
+
+import express, { Application } from 'express';
+// import underscore as _ from 'underscore';
+
+const assert = require('assert');
+
+/*
 const Web3Staking = require('../src_js/services/web3Staking');
 const assert = require('assert');
 const _ = require('underscore');
+*/
 
-let web3Staking = null;
+let web3Staking: any = null;
+
 /*
 const properties = [
   {
