@@ -1,4 +1,4 @@
-const Web3Staking = require('../src/services/web3Staking');
+const Web3Staking = require('../src_js/services/web3Staking');
 const assert = require('assert');
 const _ = require('underscore');
 
