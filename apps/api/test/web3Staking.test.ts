@@ -1,4 +1,5 @@
 import { Web3Staking } from '../src/services/web3Staking';
+// import { Web3Staking } from '../services/web3Staking';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -123,6 +124,7 @@ describe('web3Staking service testing', async function () {
   });
 
   it('check getWallets() function', async function () {
+    //console.log((await web3Staking.getWallets()));
     assert.ok(
       (await web3Staking.getWallets()).length > 0,
       "check getWallets() function has no data"

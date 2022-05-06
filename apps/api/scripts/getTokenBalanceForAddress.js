@@ -13,20 +13,16 @@ const getTokenBalance = async (wallet) => {
     contractJson.abi,
     provider
   )
-  const stakingWithSigner = stakingContract.connect(wallet);
+  //const stakingWithSigner = stakingContract.connect(wallet);
 
-  const balance = await stakingWithSigner.balanceOf(wallet.address);
-  console.log('address :: ', wallet.address);
+  const balance = await stakingContract.balanceOf(wallet);
+  console.log('address :: ', wallet);
   console.log('balance :: ', balance.toString());
 }
 
 
 async function run (owner) {
-  const mnemonic = process.env.GANACHE_PHRASE;
-  const wallet = Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${owner}`);
-  const walletConnected = wallet.connect(provider);
-  // console.log("Address: " + wallet.address);
-  await getTokenBalance(walletConnected);
+  await getTokenBalance(owner);
 
 /*
   const accountsArray = await getAccounts();
@@ -43,7 +39,7 @@ async function run (owner) {
 
 //run(0);
 //
-console.log(process.argv[2]);
+console.log(process.argv[1] + " " + process.argv[2]);
 run(
-  (process.argv[2]) ? process.argv[2] : 0
+  (process.argv[2]) ? process.argv[2] : '0xd03b9c07703bc73ccd1586e202c9ddf5af45e81c'
 );
