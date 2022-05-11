@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-contract MyToken is ERC20, ERC20Permit, ERC20Votes {
-  constructor() ERC20("MyToken", "MTK") ERC20Permit("MyToken") {}
+contract GovToken is ERC20, ERC20Permit, ERC20Votes {
+  constructor() ERC20("GovToken", "MTK") ERC20Permit("GovToken") {}
 
   // The functions below are overrides required by Solidity.
 
@@ -32,13 +32,13 @@ contract MyToken is ERC20, ERC20Permit, ERC20Votes {
   }
 }
 
-import "./governance/Governor.sol";
-import "./governance/compatibility/GovernorCompatibilityBravo.sol";
-import "./governance/extensions/GovernorVotes.sol";
-import "./governance/extensions/GovernorVotesQuorumFraction.sol";
-import "./governance/extensions/GovernorTimelockControl.sol";
+import "@openzeppelin/contracts/governance/Governor.sol";
+import "@openzeppelin/contracts/governance/compatibility/GovernorCompatibilityBravo.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
-// import "@openzeppelin/contracts/governance/TimelockController.sol";
+import "@openzeppelin/contracts/governance/TimelockController.sol";
 
 contract MyGovernor is Governor, GovernorCompatibilityBravo, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
   constructor(IVotes _token, TimelockController _timelock)
