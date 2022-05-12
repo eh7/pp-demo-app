@@ -32,6 +32,7 @@ contract GovToken is ERC20, ERC20Permit, ERC20Votes {
   }
 }
 
+/*
 import "@openzeppelin/contracts/governance/Governor.sol";
 import "@openzeppelin/contracts/governance/compatibility/GovernorCompatibilityBravo.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
@@ -74,7 +75,8 @@ contract MyGovernor is Governor, GovernorCompatibilityBravo, GovernorVotes, Gove
   function getVotes(address account, uint256 blockNumber)
     public
     view
-    override(IGovernor, GovernorVotes)
+    // override(IGovernor, GovernorVotes)
+    override(IGovernor, Governor)
     returns (uint256)
   {
     return super.getVotes(account, blockNumber);
@@ -130,3 +132,4 @@ contract MyGovernor is Governor, GovernorCompatibilityBravo, GovernorVotes, Gove
     return super.supportsInterface(interfaceId);
   }
 }
+*/
